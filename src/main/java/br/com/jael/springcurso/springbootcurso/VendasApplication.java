@@ -20,10 +20,10 @@ public class VendasApplication {
 			// clienteRepository.salvar(new Cliente("Bruno Nobre"));
 			// clienteRepository.salvar(new Cliente("Jefferson Califas"));
 
-			List<Cliente> todosOsClientes = clienteRepository.obterTodos();
+			List<Cliente> todosOsClientes = clienteRepository.findAll();
 			todosOsClientes.forEach(System.out::println);
 
-			clienteRepository.delete(10);
+			clienteRepository.deleteById(10);
 			todosOsClientes.forEach(System.out::println);
 		};
 	}

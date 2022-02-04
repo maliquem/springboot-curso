@@ -1,10 +1,10 @@
 package br.com.jael.springcurso.springbootcurso.model.entities;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -12,30 +12,32 @@ public class ItemPedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
+    @JoinColumn
     private Pedido pedido;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
+    @JoinColumn
     private Produto produto;
 
-    private int quantidade;
+    private Integer quantidade;
 
     public ItemPedido() {
     }
 
-    public ItemPedido(Pedido pedido, Produto produto, int quantidade) {
+    public ItemPedido(Pedido pedido, Produto produto, Integer quantidade) {
         this.pedido = pedido;
         this.produto = produto;
         this.quantidade = quantidade;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return this.id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
