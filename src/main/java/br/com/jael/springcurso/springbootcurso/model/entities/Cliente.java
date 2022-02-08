@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Cliente {
 
@@ -19,6 +21,7 @@ public class Cliente {
     @NotBlank
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "cliente")
     private Set<Pedido> pedidos;
 
@@ -30,7 +33,7 @@ public class Cliente {
         this.pedidos = pedidos;
     }
 
-    public int getId() {
+    public Integer getId() {
         return this.id;
     }
 

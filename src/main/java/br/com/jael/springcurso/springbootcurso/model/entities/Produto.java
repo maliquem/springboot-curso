@@ -26,7 +26,7 @@ public class Produto {
         this.preco = preco;
     }
 
-    public int getId() {
+    public Integer getId() {
         return this.id;
     }
 

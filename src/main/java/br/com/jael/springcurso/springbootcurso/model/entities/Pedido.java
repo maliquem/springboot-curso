@@ -29,7 +29,7 @@ public class Pedido {
 
     private LocalDate dataPedido;
 
-    @Column(name = "total", length = 20, precision = 2)
+    @Column(name = "total", precision = 20, scale = 2)
     private BigDecimal valorTotal;
 
     public Pedido() {
@@ -77,6 +77,15 @@ public class Pedido {
 
     public void setValorTotal(BigDecimal valorTotal) {
         this.valorTotal = valorTotal;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                " id='" + getId() + "'" +
+                ", dataPedido='" + getDataPedido() + "'" +
+                ", valorTotal='" + getValorTotal() + "'" +
+                "}";
     }
 
 }
