@@ -1,7 +1,9 @@
 package br.com.jael.springcurso.springbootcurso.model.entities;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,6 +23,9 @@ public class Cliente {
     @NotBlank
     private String name;
 
+    @Column(precision = 11, scale = 0, nullable = false)
+    private BigDecimal cpf;
+
     @JsonIgnore
     @OneToMany(mappedBy = "cliente")
     private Set<Pedido> pedidos;
@@ -28,9 +33,9 @@ public class Cliente {
     public Cliente() {
     }
 
-    public Cliente(String name, Set<Pedido> pedidos) {
+    public Cliente(String name, BigDecimal cpf) {
         this.name = name;
-        this.pedidos = pedidos;
+        this.cpf = cpf;
     }
 
     public Integer getId() {
@@ -55,6 +60,14 @@ public class Cliente {
 
     public void setPedidos(Set<Pedido> pedidos) {
         this.pedidos = pedidos;
+    }
+
+    public BigDecimal getCpf() {
+        return this.cpf;
+    }
+
+    public void setCpf(BigDecimal cpf) {
+        this.cpf = cpf;
     }
 
     @Override
