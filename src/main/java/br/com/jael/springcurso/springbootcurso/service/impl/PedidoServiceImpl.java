@@ -4,10 +4,12 @@ import br.com.jael.springcurso.springbootcurso.domain.entities.Cliente;
 import br.com.jael.springcurso.springbootcurso.domain.entities.ItemPedido;
 import br.com.jael.springcurso.springbootcurso.domain.entities.Pedido;
 import br.com.jael.springcurso.springbootcurso.domain.entities.Produto;
+import br.com.jael.springcurso.springbootcurso.domain.enums.StatusPedido;
 import br.com.jael.springcurso.springbootcurso.domain.repository.ClientesRepository;
 import br.com.jael.springcurso.springbootcurso.domain.repository.ItemPedidoRepository;
 import br.com.jael.springcurso.springbootcurso.domain.repository.PedidosRepository;
 import br.com.jael.springcurso.springbootcurso.domain.repository.ProdutosRepository;
+import br.com.jael.springcurso.springbootcurso.exception.PedidoNaoEncontradoException;
 import br.com.jael.springcurso.springbootcurso.exception.RegraNegocioException;
 import br.com.jael.springcurso.springbootcurso.rest.dto.ItemPedidoDTO;
 import br.com.jael.springcurso.springbootcurso.rest.dto.PedidoDTO;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,6 +41,7 @@ public class PedidoServiceImpl implements PedidoService {
         pedido.setTotal(dto.getTotal());
         pedido.setDataPedido(LocalDate.now());
         pedido.setCliente(cliente);
+        pedido.setStatus(StatusPedido.REALIZADO);
 
         List<ItemPedido> itensPedido = converterItens(pedido, dto.getItens());
         pedidosRepository.save(pedido);
@@ -45,6 +49,22 @@ public class PedidoServiceImpl implements PedidoService {
         pedido.setItens(itensPedido);
         return pedido;
     }
+
+    @Override
+    public Optional<Pedido> obterPedidoCompleto(Integer id) {
+        return pedidosRepository.findByIdFetchItens(id);
+    }
+
+    @Override
+    @Transactional
+    public void atualizarStatus(Integer id, StatusPedido statusPedido) {
+        pedidosRepository.findById(id).map(p -> {
+            p.setStatus(statusPedido);
+            return pedidosRepository.save(p);
+        }).orElseThrow(PedidoNaoEncontradoException::new);
+
+    }
+
 
     private List<ItemPedido> converterItens(Pedido pedido, List<ItemPedidoDTO> itens){
         if(itens.isEmpty()){

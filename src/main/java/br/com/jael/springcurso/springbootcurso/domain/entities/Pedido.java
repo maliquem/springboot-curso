@@ -1,5 +1,6 @@
 package br.com.jael.springcurso.springbootcurso.domain.entities;
 
+import br.com.jael.springcurso.springbootcurso.domain.enums.StatusPedido;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -33,6 +34,9 @@ public class Pedido {
 
     @Column(name = "total", precision = 20, scale = 2)
     private BigDecimal total;
+
+    @Enumerated(EnumType.STRING)
+    private StatusPedido status;
 
     @Override
     public boolean equals(Object o) {
