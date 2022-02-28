@@ -3,10 +3,10 @@ package br.com.jael.springcurso.springbootcurso.domain.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import java.math.BigDecimal;
+import javax.validation.constraints.NotEmpty;
 import java.util.Objects;
 import java.util.Set;
 
@@ -21,11 +21,12 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank
+    @NotEmpty(message = "{campo.nome.obrigatorio}")
     private String name;
 
-    @Column(precision = 11, nullable = false)
-    private BigDecimal cpf;
+    @NotEmpty(message = "{campo.cpf.obrigatorio}")
+    @CPF(message = "{campo.cpf.invalido}")
+    private String cpf;
 
     @JsonIgnore
     @OneToMany(mappedBy = "cliente")

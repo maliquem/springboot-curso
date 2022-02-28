@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @NoArgsConstructor
@@ -20,8 +22,10 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotEmpty(message = "{campo.nome.obrigatorio}")
     private String name;
 
+    @NotNull(message = "{campo.preco.obrigatorio}")
     private Double preco;
 
     @Override

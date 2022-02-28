@@ -9,6 +9,7 @@ import org.springframework.data.domain.ExampleMatcher.StringMatcher;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
@@ -28,13 +29,13 @@ public class ProdutoController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public Produto postProduto(@RequestBody Produto produto) {
+    public Produto postProduto(@RequestBody @Valid Produto produto) {
         return produtosRepository.save(produto);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
-    public void putProduto(@PathVariable Integer id, @RequestBody Produto produto) {
+    public void putProduto(@PathVariable Integer id, @RequestBody @Valid Produto produto) {
         produtosRepository.findById(id).map(p -> {
             produto.setId(p.getId());
             produtosRepository.save(produto);
