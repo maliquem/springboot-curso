@@ -6,7 +6,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Service;
@@ -21,11 +20,11 @@ import java.util.Date;
 @Service
 public class JwtService {
 
-    @Value("${security.jwt.expiracao}")
-    private String expiracao;
+    //@Value("${security.jwt.expiracao}")
+    private static final String expiracao = "30";
 
-    @Value("${security.jwt.chave-assinatura}")
-    private String secret;
+    //@Value("${security.jwt.chave-assinatura}")
+    private static final String secret = "39d094a9a898adcbc76b2200d49e68709113b0162e1ef77a10e5a41a11682f1e261efe6702c8761cbff84ee5cc67aa57482e00f1ab3eb72bc3252a2d52a9837b";
 
     private final SecretKey chaveAssinatura = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
 

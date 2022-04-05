@@ -2,6 +2,7 @@ package br.com.jael.springcurso.springbootcurso.service.impl;
 
 import br.com.jael.springcurso.springbootcurso.domain.entities.Usuario;
 import br.com.jael.springcurso.springbootcurso.domain.repository.UsuarioRepository;
+import br.com.jael.springcurso.springbootcurso.exception.SenhaInvalidaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UsuarioServiceImpl implements UserDetailsService {
 
     private final PasswordEncoder passwordEncoder;
+
     @Autowired
     private UsuarioRepository usuarioRepository;
 
@@ -25,6 +27,16 @@ public class UsuarioServiceImpl implements UserDetailsService {
     @Transactional
     public Usuario salvar(Usuario usuario){
         return usuarioRepository.save(usuario);
+    }
+
+    public UserDetails autenticar(Usuario usuario){
+       UserDetails user = loadUserByUsername(usuario.getLogin());
+       boolean senhasBatem = passwordEncoder.matches(usuario.getSenha(), user.getPassword());
+
+       if (senhasBatem){
+           return user;
+       }
+       throw new SenhaInvalidaException();
     }
 
     @Override

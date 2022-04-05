@@ -1,6 +1,8 @@
 package br.com.jael.springcurso.springbootcurso.rest.controller;
 
 import br.com.jael.springcurso.springbootcurso.domain.entities.Usuario;
+import br.com.jael.springcurso.springbootcurso.rest.dto.CredenciaisDTO;
+import br.com.jael.springcurso.springbootcurso.rest.dto.TokenDTO;
 import br.com.jael.springcurso.springbootcurso.service.impl.UsuarioServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,5 +25,12 @@ public class UsuarioController {
         String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
         usuario.setSenha(senhaCriptografada);
         return usuarioService.salvar(usuario);
+    }
+
+    @PostMapping("/auth")
+    public TokenDTO autenticar(@RequestBody CredenciaisDTO credenciais){
+        try {
+            usuarioService.autenticar(Usuario.builder().login(credenciais.getLogin()).senha(credenciais.getSenha()).build());
+        }
     }
 }
