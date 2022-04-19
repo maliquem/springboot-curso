@@ -14,6 +14,7 @@ import javax.validation.constraints.NotEmpty;
 @Setter
 @ToString
 @Entity
+@Builder
 public class Usuario {
 
     @Id
