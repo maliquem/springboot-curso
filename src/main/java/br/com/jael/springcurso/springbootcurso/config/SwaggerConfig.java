@@ -3,7 +3,6 @@ package br.com.jael.springcurso.springbootcurso.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -17,8 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
-@EnableSwagger2
-@EnableWebMvc
 public class SwaggerConfig {
 
     @Bean
@@ -56,7 +53,7 @@ public class SwaggerConfig {
 
     private SecurityContext securityContext() {
         return SecurityContext.builder().securityReferences(defaultAuth())
-                .operationSelector(operationContext -> true).build();
+                .forPaths(PathSelectors.any()).build();
     }
 
     private List<SecurityReference> defaultAuth(){
