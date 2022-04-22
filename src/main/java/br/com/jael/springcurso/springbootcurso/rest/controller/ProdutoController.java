@@ -2,6 +2,10 @@ package br.com.jael.springcurso.springbootcurso.rest.controller;
 
 import br.com.jael.springcurso.springbootcurso.domain.entities.Produto;
 import br.com.jael.springcurso.springbootcurso.domain.repository.ProdutosRepository;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -22,6 +26,11 @@ public class ProdutoController {
     ProdutosRepository produtosRepository;
 
     @GetMapping("/{id}")
+    @ApiOperation("Obter detalhes de um produto.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Produto Encontrado."),
+            @ApiResponse(code = 404, message = "Produto não encontrado para o ID informado.")
+    })
     public Produto getProdutoById(@PathVariable Integer id) {
         return produtosRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Produto não encontrado."));
@@ -29,12 +38,21 @@ public class ProdutoController {
 
     @PostMapping
     @ResponseStatus(CREATED)
+    @ApiOperation("Salvar um novo produto.")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Produto Salvo com sucesso."),
+            @ApiResponse(code = 400, message = "Erro de validação.")
+    })
     public Produto postProduto(@RequestBody @Valid Produto produto) {
         return produtosRepository.save(produto);
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(NO_CONTENT)
+    @ApiOperation("Atualizar um produto existente")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Produto Atualizado."),
+            @ApiResponse(code = 404, message = "Produto não encontrado para o ID informado.")
+    })
     public void putProduto(@PathVariable Integer id, @RequestBody @Valid Produto produto) {
         produtosRepository.findById(id).map(p -> {
             produto.setId(p.getId());
@@ -44,7 +62,11 @@ public class ProdutoController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(NO_CONTENT)
+    @ApiOperation("Deletar um produto existente")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Produto deletado."),
+            @ApiResponse(code = 404, message = "Produto não encontrado para o ID informado.")
+    })
     public void deleteProduto(@PathVariable Integer id) {
         produtosRepository.findById(id).map(p -> {
             produtosRepository.delete(p);
@@ -53,6 +75,11 @@ public class ProdutoController {
     }
 
     @GetMapping
+    @ApiOperation("Obter detalhes de produto, de que contem a string")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Produtos encontrados."),
+            @ApiResponse(code = 404, message = "Não possui nenhum produto, que contem a string passada.")
+    })
     public List<Produto> findProduto(Produto filtro) {
         ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreCase().withStringMatcher(StringMatcher.CONTAINING);
         Example<Produto> example = Example.of(filtro, matcher);

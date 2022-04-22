@@ -8,6 +8,10 @@ import br.com.jael.springcurso.springbootcurso.rest.dto.InformacaoItemPedidoDTO;
 import br.com.jael.springcurso.springbootcurso.rest.dto.InformacoesPedidoDTO;
 import br.com.jael.springcurso.springbootcurso.rest.dto.PedidoDTO;
 import br.com.jael.springcurso.springbootcurso.service.PedidoService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -32,12 +36,22 @@ public class PedidoController {
 
     @PostMapping
     @ResponseStatus(CREATED)
+    @ApiOperation("Criar um pedido")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Pedido criado com sucesso."),
+            @ApiResponse(code = 400, message = "Erro de validação.")
+    })
     public Integer postPedido(@RequestBody @Valid PedidoDTO dto){
         Pedido pedido = pedidoService.salvar(dto);
         return pedido.getId();
     }
 
     @GetMapping("/{id}")
+    @ApiOperation("Obter detalhes de um pedido.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Pedido Encontrado."),
+            @ApiResponse(code = 404, message = "Pedido não encontrado para o ID informado.")
+    })
     public InformacoesPedidoDTO getById(@PathVariable Integer id){
         return pedidoService.obterPedidoCompleto(id).map(this::converterPedido).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Pedido não encontrado."));
     }
@@ -68,6 +82,11 @@ public class PedidoController {
 
     @PatchMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
+    @ApiOperation("Atualizar um pedido existente")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Pedido Atualizado."),
+            @ApiResponse(code = 404, message = "Pedido não encontrado para o ID informado.")
+    })
     public void updateStatus(@PathVariable Integer id, @RequestBody AtualizacaoStatusPedidoDTO dto){
         String novoStatus = dto.getNovoStatus();
         pedidoService.atualizarStatus(id, StatusPedido.valueOf(novoStatus));
